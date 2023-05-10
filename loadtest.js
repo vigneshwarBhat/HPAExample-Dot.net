@@ -2,8 +2,8 @@ import { check, sleep } from 'k6';
 import http from "k6/http";
 
 export let options = {
-  duration: "3m",
-  vus: 5,
+  duration: "5m",
+  vus: 10,
   thresholds: {
     
     http_req_duration: ["p(95)<700"]
@@ -23,9 +23,20 @@ export let options = {
 // };
 
 export default function () {
-  let r = http.get(`http://127.0.0.1:52135/WeatherForecast`);
+  let data = { cartId:'3fa85f64-5717-4562-b3fc-2c963f66afa7', cartLine: 50  };
+  let r = http.post(`http://127.0.0.1:62517/api/Cart/item/add`, JSON.stringify(data) ,{
+    headers: { 'Content-Type': 'application/json' }});
   check(r, {
     'status is 200': r => r.status === 200,
   });
   sleep(3);
 }
+
+// export default function () {
+
+//   let r = http.get(`http://127.0.0.1:53799/`);
+//   check(r, {
+//     'status is 200': r => r.status === 200,
+//   });
+//   sleep(3);
+// }

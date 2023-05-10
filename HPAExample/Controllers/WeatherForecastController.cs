@@ -1,5 +1,7 @@
 ﻿using HPAExample;
+using HPAExample.Model;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Metrics;
 
 namespace API1.Controllers;
 
@@ -13,21 +15,34 @@ public class WeatherForecastController : ControllerBase
     };
 
     private readonly ILogger<WeatherForecastController> _logger;
+    private readonly Counter<long> _freezingDaysCounter;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, Instrumentation instrumentation)
     {
         _logger = logger;
+        _freezingDaysCounter = instrumentation.FreezingDaysCounter;
     }
 
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        var rng = new Random();
+        var forecast = Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateTime.Now.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            TemperatureC = rng.Next(-20, 55),
+            Summary = Summaries[rng.Next(Summaries.Length)],
         })
-            .ToArray();
+        .ToArray();
+
+        // Optional: Count the freezing days
+        _freezingDaysCounter.Add(forecast.Count(f => f.TemperatureC < 0));
+
+        _logger.LogInformation(
+            "WeatherForecasts generated {count}: {forecasts}",
+            forecast.Length,
+            forecast);
+
+        return forecast;
     }
 }

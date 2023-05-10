@@ -6,12 +6,13 @@ metadata:
 spec:
   scaleTargetRef:
     name: api-deployment
-  minReplicaCount: 1   #Optional Default 0
+  minReplicaCount: 2   #Optional Default 0
   maxReplicaCount: 4  #Optional Default 100
   triggers:
   - type: prometheus
     metadata:
       serverAddress: http://10.96.105.40:80 # verify this is correct
-      metricName: http_requests_received_total # DEPRECATED: This parameter is deprecated as of KEDA v2.10 and will be removed in version 2.12
-      threshold: '1.5'
-      query: sum(rate(http_requests_received_total{service="api-service"}[2m]))
+      metricName: hpaexample_Largecart_Number # DEPRECATED: This parameter is deprecated as of KEDA v2.10 and will be removed in version 2.12
+      threshold: "0.1"
+      #query: histogram_quantile(0.90, rate(http_request_duration_seconds_bucket[2m]))
+      query: sum(rate(hpaexample_Largecart_Number[5m]))
