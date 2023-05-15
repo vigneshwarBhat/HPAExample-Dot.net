@@ -22,10 +22,11 @@ export let options = {
 //   ],
 // };
 
+
 export default function () {
-  let data = { cartId:'3fa85f64-5717-4562-b3fc-2c963f66afa7', cartLine: 50  };
-  let r = http.post(`http://127.0.0.1:62517/api/Cart/item/add`, JSON.stringify(data) ,{
-    headers: { 'Content-Type': 'application/json' }});
+  let data = { cartId:'3fa85f64-5717-4562-b3fc-2c963f66afa7', cartLine: 101 };
+  let r = http.post(`http://cart.example.com/api/Cart/item/add`, JSON.stringify(data) ,{
+    headers: { 'Content-Type': 'application/json', 'Cookie':'route=1683977792.705.1932.920964|af725159d9fb6db576537fb3c4eb5c8a'}});
   check(r, {
     'status is 200': r => r.status === 200,
   });
