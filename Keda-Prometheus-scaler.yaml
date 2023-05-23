@@ -14,5 +14,5 @@ spec:
       serverAddress: http://10.96.105.40:80 # verify this is correct
       metricName: hpaexample_Largecart_Number # DEPRECATED: This parameter is deprecated as of KEDA v2.10 and will be removed in version 2.12
       threshold: "0.1"
-      #query: histogram_quantile(0.90, rate(http_request_duration_seconds_bucket[2m]))
+      #query: histogram_quantile(0.90, rate(http_request_duration_seconds_bucket[2m])) > 1 && sum(rate(hpaexample_Largecart_Number[5m])) >= 20
       query: sum(rate(hpaexample_Largecart_Number[5m]))
