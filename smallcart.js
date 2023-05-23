@@ -3,7 +3,7 @@ import http from "k6/http";
 
 export let options = {
   duration: "5m",
-  vus: 10,
+  vus: 50,
   thresholds: {
     
     http_req_duration: ["p(95)<700"]
@@ -23,10 +23,10 @@ export let options = {
 // };
 
 export default function () {
-  let data = { cartId:'3fa85f64-5717-4562-b3fc-2c963f66afa7', cartLine: 10 };
+  let data = { cartId:'3fa85f64-5717-4562-b3fc-2c963f66afa7', cartLine: 10};
   let cookieHeader='';
   let r = http.post(`http://cart.example.com/api/Cart/item/add`, JSON.stringify(data) ,{
-    headers: { 'Content-Type': 'application/json', 'Cookie':'route=1683977792.705.1932.920964|af725159d9fb6db576537fb3c4eb5c8a' }});
+    headers: { 'Content-Type': 'application/json', 'Cookie':'route=1684729465.945.303.168119|af725159d9fb6db576537fb3c4eb5c8a' }});
     cookieHeader=r.cookies["route"];
   check(r, {
     'status is 200': r => r.status === 200,
